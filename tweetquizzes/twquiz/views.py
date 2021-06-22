@@ -4,11 +4,11 @@ from django.shortcuts import render, redirect
 
 import random
 
-from .scripts.masktweets import MaskTweets, remove_huzoku
-from .scripts.get_oatoken import get_authenticate_endpoint_url, get_access_token
+from .pyscripts.masktweets import MaskTweets, remove_huzoku
+from .pyscripts.get_oatoken import get_authenticate_endpoint_url, get_access_token
 
 # コンシューマーキーのインポート．追跡しない
-from .scripts.local_settings.apikeys import (
+from .pyscripts.local_settings.apikeys import (
     CONSUMER_KEY,
     CONSUMER_KEY_SECRET,
 )
