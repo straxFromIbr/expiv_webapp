@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mask test</title>
+</head>
+
+<body style="user-select:none; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;">
+    <main>
+        <p id='textarea' style="color:black; background-color:white;"> </p>
+        <input type="button" value="change mask" onclick="buttonClick()">
+        <a href='/account'>再ログイン</a>
+    </main>
+</body>
+
+
+
+<script>
+    let text_and_filter_list = [[['これ', 'くらい', 'で', 'ツイート', '数', 'は', '十分', 'か'], [0, 3, 4, 6]], [['受けて', 'ない', 'ん', 'なら', 'そりゃ', '落ちる'], [0, 1, 4, 5]], [['専攻科', '大変', 'そう', 'だ', 'な', '．', '．', '．', '．'], [0, 1, 2]], [['今晩', 'は', 'ヨーグルト', 'が', '食べ', 'たい', '．'], [2, 4]], [['明日', 'は', 'すき家', 'で', '牛丼', 'を', '食べよ', 'う', 'か', 'なあ'], [2, 4, 6]], [['私', 'は', '今日', 'ラーメン', 'を', '食べ', 'ます', '．'], [0, 3, 5]], [['テストツイート', 'その', '2'], [0, 2]], [['テストツイート', 'その', '1'], [0, 2]]]
+    let text_list = ['これ', 'くらい', 'で', 'ツイート', '数', 'は', '十分', 'か'];
+    let filter_idx = [0, 3, 4, 6];
+    let mask_idx = 0;
+    const pre = '<span style="color: black; background-color: black;">';
+    const post = '</span>';
+    const results = document.getElementById('textarea');
+    const idxarea = document.getElementById('idxarea');
+    buttonClick()
+    function buttonClick() {
+        mask_idx = filter_idx[Math.floor(Math.random() * filter_idx.length)]
+        var result = '';
+        for (var idx = 0; idx < text_list.length; idx += 1) {
+            if (idx == mask_idx) {
+                result += pre + text_list[idx] + post;
+            } else {
+                result += text_list[idx];
+            }
+        }
+        results.innerHTML = result;
+    }
+</script>
+
+</html>
