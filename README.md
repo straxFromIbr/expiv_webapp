@@ -11,7 +11,7 @@
 4. コンテナ起動  
 	`docker run --rm -p 8000:8000 -it pytest  /bin/bash -l`
 5. プログラム実行  
-	`cd webapp; python manage.py runserver 0:8000`
+	`python manage.py runserver 0:8000`
 6. Webブラウザで[http://localhost:8000](http://localhost:8000)にアクセス．
 
 
