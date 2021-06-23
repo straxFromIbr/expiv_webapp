@@ -34,6 +34,7 @@ class MaskTweets:
         self.url = "https://api.twitter.com/1.1/statuses/user_timeline.json"
         self.tweets = []
         self.name = ""
+        self.mute = ""
 
     def set_name(self, name):
         self.name = name
@@ -72,7 +73,11 @@ class MaskTweets:
         req = self.session.get(self.url, params=params)
         if req.status_code == 200:
             res = json.loads(req.text)
-            self.tweets += [self.lint_tweet(line["full_text"]) for line in res]
+            self.tweets += [
+                self.lint_tweet(line["full_text"])
+                for line in res
+                if self.mute == "" or not self.mute in line["full_text"]
+            ]
             return True
         else:
             print(json.loads(req.text))
@@ -98,21 +103,7 @@ class MaskTweets:
 
 def remove_huzoku(tweet):
     wakati = Wakati(tweet)
-    wakati.attr_filter("代名詞")
-    wakati.attr_filter("連体詞")
-    wakati.attr_filter("助詞")
-    wakati.attr_filter("助動詞")
-    wakati.attr_filter("接尾辞")
-    wakati.attr_filter("接頭辞")
-    wakati.attr_filter("記号")
-    wakati.attr_filter("補助記号")
-    wakati.attr_filter("接続詞")
-
-    # level 2 filter
-    wakati.attr_filter("非自立", lvl=1)
-    wakati.attr_filter("非自立可能", lvl=1)
-    wakati.attr_filter("副詞可能", lvl=2)
-
+    wakati.add_multifilters()
     return [wakati.wakati, wakati.filter_idx]
 
 
@@ -133,11 +124,10 @@ if __name__ == "__main__":
     keys = (
         CONSUMER_KEY,
         CONSUMER_KEY_SECRET,
-        "1221568044087951360-zJf3aopGCro7OkFEMmrqyXbO1HR1kN",
-        "QXEx0GlHC5oicHBLs55dx36KAR8Cx3VNFfSOrHCnuWwfK",
     )
-
+    mute = "やせいの トランセルが とびだしてきた！"
     tweet = MaskTweets(keys=keys)
-    if tweet.dl_tweet(10):
-        print(tweet.tweets)
+    tweet.mute = mute
+    if tweet.dl_tweet(100):
+        pprint(tweet.tweets)
         print(remove_huzoku(random.choice(tweet.tweets)))

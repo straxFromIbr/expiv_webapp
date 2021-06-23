@@ -25,8 +25,9 @@ def index(request):
     tweet = MaskTweets(keys=(CONSUMER_KEY, CONSUMER_KEY_SECRET, *tokens))
     if "name" in request.GET:
         tweet.name = request.GET["name"]
-
-    if tweet.dl_tweet(20):
+    if "mute" in request.GET:
+        tweet.mute = request.GET["mute"]
+    if tweet.dl_tweet(500):
         wakati, filter_idx = remove_huzoku(random.choice(tweet.tweets))
 
         text_and_filter_list = [remove_huzoku(tw) for tw in tweet.tweets]
@@ -45,7 +46,7 @@ def account(request):
     """
     # ユーザー認証
     セッションをクリアし寿命設定．アプリケーション認証用エンドポイントURLを生成しリダイレクト．
-    失敗した場合，自身にリダイレクト → 無限に繰り返される恐れあり．他ページに飛ばすのが良い？
+    失敗した場合，自身にリダイレクト → 無限に繰り返される恐れあり．他ページに飛ばすのが良い？ ->エラーページ作った(autherr)
     """
     # request.session.clear()
     ##  セッションの寿命
@@ -59,11 +60,10 @@ def account(request):
         # https://api.twitter.com/oauth/authenticate?oauth_token=??? みたいなヤツ
         return redirect(endpoint_url)
     else:
-        # 失敗した時はエラーページに．accountに．ret=FalseとなるのはたいていコールバックURLのミス
+        # 失敗した時はエラーページに．ret=FalseとなるのはたいていコールバックURLのミス
         msg = endpoint_url
         return render(request, "twquiz/autherr.html", context={"msg": msg})
 
-    # return render(request, "twquiz/account.html", {"endpoint_url": endpoint_url})
 
 
 def auth(request):

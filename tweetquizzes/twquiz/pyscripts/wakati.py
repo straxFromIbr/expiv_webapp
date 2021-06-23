@@ -11,6 +11,7 @@ class Wakati:
     """
     入力されたテキストをMecabで形態素解析し，補助語を除外したインデックスを返す．
     """
+
     def __init__(self, sentence):
         """
         入力テキストをパース．
@@ -23,9 +24,7 @@ class Wakati:
         parsed = [
             word.split("\t") for word in self.parser.parse(sentence).split("\n")[:-2]
         ]
-        print(parsed)
         self.parsed = [word[:4] + [word[4].split("-")] + word[5:] for word in parsed]
-        print(self.parsed)
         self.wakati = [word[0] for word in self.parsed]
         self.filter_idx = list(range(len(self.parsed)))
 
@@ -66,6 +65,27 @@ class Wakati:
             replaced_idxs.append(idx)
         return replaced_idxs, wakati
 
+    def add_multifilters(self):
+        """
+        助詞，助動詞，接尾辞，接頭辞，接続詞，空白，記号，補助記号，非自立，非自立可能な単語をフィルタリング
+        """
+        # level 1 filter
+        # self.attr_filter("代名詞")
+        # self.attr_filter("連体詞")
+        self.attr_filter("助詞")
+        self.attr_filter("助動詞")
+        self.attr_filter("接尾辞")
+        self.attr_filter("接頭辞")
+        self.attr_filter("接続詞")
+        self.attr_filter("空白")
+        self.attr_filter("記号")
+        self.attr_filter("補助記号")
+
+        # level 2 filter
+        self.attr_filter("非自立", lvl=1)
+        self.attr_filter("非自立可能", lvl=1)
+        self.attr_filter("数詞", lvl=1)
+
     def get_filter(self):
         return self.filter_idx
 
@@ -92,21 +112,7 @@ def mask_text(text, nbreplace=3):
     # print(wakati.parsed)
     # print(wakati.filter_idx)
     wakati = Wakati(text)
-    # level 1 filter
-    wakati.attr_filter("代名詞")
-    wakati.attr_filter("連体詞")
-    wakati.attr_filter("助詞")
-    wakati.attr_filter("助動詞")
-    wakati.attr_filter("接尾辞")
-    wakati.attr_filter("接頭辞")
-    wakati.attr_filter("記号")
-    wakati.attr_filter("補助記号")
-    wakati.attr_filter("接続詞")
-
-    # level 2 filter
-    wakati.attr_filter("非自立", lvl=1)
-    wakati.attr_filter("非自立可能", lvl=1)
-    wakati.attr_filter("副詞可能", lvl=2)
+    wakati.add_multifilters() 
 
     # print(wakati.filter_idx)
     replaced_idxs, replaced = wakati.replace_random(nbreplace=nbreplace)
@@ -129,20 +135,7 @@ def parse_filter(text):
         return parse_filter_dic
 
     # append filter
-    wakati.attr_filter("代名詞")
-    wakati.attr_filter("連体詞")
-    wakati.attr_filter("助詞")
-    wakati.attr_filter("助動詞")
-    wakati.attr_filter("接尾辞")
-    wakati.attr_filter("接頭辞")
-    wakati.attr_filter("記号")
-    wakati.attr_filter("補助記号")
-    wakati.attr_filter("接続詞")
-    wakati.attr_filter("非自立", lvl=1)
-    wakati.attr_filter("非自立可能", lvl=1)
-    wakati.attr_filter("接尾", lvl=1)
-    wakati.attr_filter("副詞可能", lvl=2)
-    wakati.attr_filter("サ変", lvl=4)
+    wakati.add_multifilters()
     # print(wakati.apply_filter())
     return {
         "filter_idxs": wakati.filter_idx,
@@ -154,7 +147,7 @@ if __name__ == "__main__":
     from pprint import pprint
 
     text = (
-        "日本では、テレビやラジオ、映画などの放送、小説や漫画、新聞などの出版の分野でも、"
+        "日本では、　テレビやラジオ、映画などの放送、小説や漫画、新聞などの出版の分野でも、"
         + "日本語が使われることがほとんどである。国外のドラマや映画が放送される場合でも、基本"
         + "的には日本語に訳し、字幕を付けたり声を当てたりしてから放送されるなど、受け手が日本"
         + "語のみを理解することを当然の前提として作成される。原語のまま放送・出版されるものも"
@@ -164,18 +157,17 @@ if __name__ == "__main__":
         + "ざった混種語に分けられる。字音語（漢字の音読みに由来する語の意、一般に「漢語」と称"
         + "する）は、漢文を通して古代・中世の中国から渡来した語またはそれらから派生した語彙で"
         + "あり、現代の語彙の過半数を占めている。また、「紙（かみ）」「絵/画（ゑ）」など、もと"
-        + "もと音であるが和語と認識されているものもある。さらに近代以降には西洋由来の語を"
+        + "もと音であるが和語　と認識されているものもある。さらに近代以降には西洋由来の語を"
         + "中心とする外来語が増大している（「語種」の節参照）。"
     )
-    # text = "This is 天堂真矢"
-    replaced_idxs, masked = mask_text(text, 50)
-    # print("".join(masked))
-    # print(replaced_idxs)
-    dic = parse_filter(text)
-    wakati = dic["wakati"]
-    filter_idxs = dic["filter_idxs"]
-    print(wakati)
-    print(filter_idxs)
+    text = "Twitter（ツイッター）は、アメリカ合衆国・カリフォルニア州サンフランシスコに本社を置くTwitter, Inc.のソーシャル・ネットワーキング・サービス (SNS)（情報サービス[15][16]）。「ツイート」と呼ばれる半角280文字（日本語、中国語、韓国語は全角140文字）以内のテキストや画像、動画、URLを投稿できる。"
+    print(text)
+
+    wakati = Wakati(text)
+    # print(wakati.parsed)
+    wakati.add_multifilters()
+    # print(''.join(wakati.get_removed()))
+    print("".join(wakati.apply_filter()))
     # text = "（「語種」の節参照）"
     # wakati = Wakati(text)
     # print(wakati.parsed)

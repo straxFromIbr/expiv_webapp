@@ -41,7 +41,7 @@ def get_access_token(cons_key, cons_sec, oauth_token, oauth_ver):
 
 if __name__ == "__main__":
     # Twitter Application Management で設定したコールバックURLsのどれか
-    oauth_callback = "http://localhost:8000"
+    oauth_callback = "http://localhost:8000/auth"
     try:
         from .local_settings import apikeys
     except ImportError:

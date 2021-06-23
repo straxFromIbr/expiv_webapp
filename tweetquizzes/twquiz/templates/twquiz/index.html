@@ -1,95 +1,154 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="ja">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mask test</title>
-</head>
-
-<body style="user-select:none; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;">
-    <main>
-        <p id='textarea' style="color:black; background-color:white;"> </p>
-        <input type="button" value="change mask" onclick="buttonClick4()">
-        <input type="button" value="change tweet" onclick="buttonClick2()">
-        <input type="button" value="ansewr" onclick="buttonClick3()">
-        <input type="text" id="number" value=1>
-        <input type="button" value="ok" onclick="buttonClick4()">
-        <a href='/account'>再ログイン</a>
-    </main>
-</body>
+<html>
+    <head>
+        <title>TweetQuizzes</title>
+        <link rel = "stylesheet" href = "{% static 'twquiz/styles/button.css' %}">
+        <meta name = "viewpoint" content = "width = device-width"> 
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-<script>
-    let i = 0;
-    let j = 0;
-    let text_and_filter_list = {{ text_and_filter_list | safe }}
-    let text_list = text_and_filter_list[i][0];
-    let filter_idx = text_and_filter_list[i][1];
-    let mask_idx = 0;
+        <link rel="icon" type="image/png" href="{% static 'twquiz/icon/favicon.ico' %}">
 
-    const pre = '<span style="color: black; background-color: black;">';
-    const post = '</span>';
-    const results = document.getElementById('textarea');
+        <link rel="apple-touch-icon" sizes="57x57" href="{% static 'twquiz/icon/apple-icon-57x57.png' %}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{% static 'twquiz/icon/apple-icon-60x60.png' %}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{% static 'twquiz/icon/apple-icon-72x72.png' %}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{% static 'twquiz/icon/apple-icon-76x76.png' %}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{% static 'twquiz/icon/apple-icon-114x114.png' %}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{% static 'twquiz/icon/apple-icon-120x120.png' %}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{% static 'twquiz/icon/apple-icon-144x144.png' %}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{% static 'twquiz/icon/apple-icon-152x152.png' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'twquiz/icon/apple-icon-180x180.png' %}">
+        <link rel="icon" type="image/png" sizes="192x192" href="{% static 'twquiz/icon/android-icon-192x192.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'twquiz/icon/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{% static 'twquiz/icon/favicon-96x96.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'twquiz/icon/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'twquiz/icon/manifest.json' %}">
 
+    </head>
+    <body style="user-select:none; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;">
+        <div id = "headerbg">
+            <div id = "header">
+                <header>
+                    <h1><a href = "#"><img src = "{% static 'twquiz/images/header.PNG' %}" alt = "" width = "840px"></a></h1>
+                </header>
+            </div>
+        
+            <div id = "main">
+                <div class = "box2">
+                    <h2>このサイトではTwitterのIDを入力すると、ランダムにツイートが抽出されて特定の文だけが隠された状態で表示されます。
+                        その隠された文が何なのか当てよう！というサイトになります。単純明快ッ！
+                    </h2>
+                </div>
+            <div class="cp_iptxt">
+                <label class="ef">
+                <input type="text" placeholder="隠す単語の個数を指定しましょう！(デフォルトは１個) " id = "number">
+                </label>
+            </div>
+            <br>
+            <section>
+                <a class="btn_06" onclick="buttonClick4()" ><span>ツイートを表示</span></a>
+            </section>
+            <h1></h1>
+            <h1></h1>
+            <div id = "AREA">
+                <p id='textarea' style="color:black; background-color:white;"><p>（ここにツイートが表示されます）</p></p>
+            </div>
+            <br>
+            <a class="btn_09" onclick="buttonClick3()" ><span>答えを表示する</span></a>
+            <h3></h3>
+            <a class="btn_10" onclick="buttonClick2()" ><span>ツイートを変更する</span></a>
+            <h3></h3>
+            <a href = '/account.html' class="btn_11"><span>再ログインしてアカウント変更する</span></a> 
+            <br>
+            <br>
 
-    buttonClick1()
+            </div>
 
-    function buttonClick1() {
-        mask_idx = filter_idx[Math.floor(Math.random() * filter_idx.length)]
-        var result = '';
-        for (var idx = 0; idx < text_list.length; idx += 1) {
-            if (idx == mask_idx) {
-                result += pre + text_list[idx] + post;
-            } else {
-                result += text_list[idx];
+            <div id = "footer">
+                <h1>公式ツイッター</h1>
+                <a href = "#"><h1>@Tweet_quizzes</h1></a>
+            </div>
+        </div>
+
+        <script>
+            let text_and_filter_list = {{ text_and_filter_list | safe }}
+            let i = 0;
+            let j = 0;
+            let text_list = text_and_filter_list[i][0];
+            let filter_idx = text_and_filter_list[i][1];
+            let mask_idx = 0;
+        
+            const pre = '<span style="color: black; background-color: black;">';
+            const post = '</span>';
+            const results = document.getElementById('textarea');
+        
+        
+            //buttonClick1()
+            function buttonClick1() {
+                mask_idx = filter_idx[Math.floor(Math.random() * filter_idx.length)]
+                var result = '';
+                for (var idx = 0; idx < text_list.length; idx += 1) {
+                    if (idx == mask_idx) {
+                        result += pre + text_list[idx] + post;
+                    } else {
+                        result += text_list[idx];
+                    }
+                }
+                results.innerHTML = result;
             }
-        }
-        results.innerHTML = result;
-    }
-
-    function buttonClick2() {
-        i = Math.floor(Math.random() * text_and_filter_list.length);
-        // console.log(Math.floor(Math.random() * text_and_filter_list.length));
-        text_list = text_and_filter_list[i][0];
-        filter_idx = text_and_filter_list[i][1];
-        buttonClick1();
-    }
-
-    function buttonClick3() {
-        var result = '';
-        for (var idx = 0; idx < text_list.length; idx += 1) {
-            result += text_list[idx];
-        }
-        results.innerHTML = result;
-    }
-
-    function buttonClick4() {
-        console.log("", document.getElementById("number"));
-        const nbmask = Number(document.getElementById("number").value);
-
-        var copy = filter_idx.concat();
-        var newArray = [];
-        while (copy.length > 0) {
-            n = copy.length;
-            k = Math.floor(Math.random() * n);
-
-            newArray.push(copy[k]);
-            copy.splice(k, 1);
-        }
-        var mask_position = newArray.slice(0, nbmask);
-
-        var result = '';
-        for (var idx = 0; idx < text_list.length; idx += 1) {
-            if (mask_position.indexOf(idx) != -1) {
-                result += pre + text_list[idx] + post;
-            } else {
-                result += text_list[idx];
+        
+            function buttonClick2() {
+                i = Math.floor(Math.random() * text_and_filter_list.length);
+                // console.log(Math.floor(Math.random() * text_and_filter_list.length));
+                text_list = text_and_filter_list[i][0];
+                filter_idx = text_and_filter_list[i][1];
+                buttonClick1();
             }
-        }
-        results.innerHTML = result;
-    }
-</script>
+        
+            function buttonClick3() {
+                var result = '';
+                for (var idx = 0; idx < text_list.length; idx += 1) {
+                    result += text_list[idx];
+                }
+                results.innerHTML = result;
+            }
+        
+            function buttonClick4() {
+                console.log("", document.getElementById("number"));
+                var nbmask = Number(document.getElementById("number").value);
+                if(Number(document.getElementById("number").value) == 0)
+                    nbmask = 1;
+                var copy = filter_idx.concat();
+                var newArray = [];
+                while (copy.length > 0) {
+                    n = copy.length;
+                    k = Math.floor(Math.random() * n);
+        
+                    newArray.push(copy[k]);
+                    copy.splice(k, 1);
+                }
+                var mask_position = newArray.slice(0, nbmask);
+        
+                var result = '';
+                for (var idx = 0; idx < text_list.length; idx += 1) {
+                    if (mask_position.indexOf(idx) != -1) {
+                        result += pre + text_list[idx] + post;
+                    } else {
+                        result += text_list[idx];
+                    }
+                }
+                results.innerHTML = result;
+            }
+        
+        
+        </script>
+        
 
+
+
+    </body>
 </html>
