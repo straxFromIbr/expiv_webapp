@@ -1,5 +1,5 @@
 # 情報工学実験 テーマ1 Webアプリケーション
-- `expiv` : Djangoアプリケーション
+- `tweetquizzes` : Djangoアプリケーションのルートディレクトリ
 
 
 ## 環境構築と実行の仕方
@@ -7,11 +7,15 @@
 4. ダウンロードしたディレクトリに移動．
 5. 事前に共有したシークレットキーをファイルに書き込む
 6. コンテナをビルド(5分くらいかかるかも)  
-	`docker build -t pytest .`
+	`$ docker build -t twquizcont.`
 4. コンテナ起動  
-	`docker run --rm -p 8000:8000 -it pytest  /bin/bash -l`
-5. プログラム実行  
-	`python manage.py runserver 0:8000`
+	`$ docker run --rm -p 8000:8000 -it twquizcont /bin/bash -l`
+5. 開発サーバー起動
+	``` sh
+	$ cd tweetquizzes
+	$ python manage.py migrate
+	$ python mange.py runserver 0:8000
+	```
 6. Webブラウザで[http://localhost:8000](http://localhost:8000)にアクセス．
 
 
