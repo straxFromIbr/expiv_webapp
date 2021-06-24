@@ -15,8 +15,6 @@
 
 このように指定してください．
 ```python
-import os
-
 # CONSUMER
 
 CONSUMER_KEY="your consumer key"
