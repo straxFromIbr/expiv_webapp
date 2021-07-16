@@ -24,7 +24,10 @@ SECRET_KEY = "django-insecure-o@!!#-rnsibf7ol*i_n##*5+xr)dx$ftv#-j)afm)*^6e9-z43
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost","https://tweetquizzes.herokuapp.com/", ]
+ALLOWED_HOSTS = [
+    "localhost",
+    "https://tweetquizzes.herokuapp.com/",
+]
 
 
 # Application definition
@@ -132,4 +135,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 import django_heroku
+
 django_heroku.settings(locals())

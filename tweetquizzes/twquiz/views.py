@@ -65,7 +65,6 @@ def account(request):
         return render(request, "twquiz/autherr.html", context={"msg": msg})
 
 
-
 def auth(request):
     """
     セッション登録

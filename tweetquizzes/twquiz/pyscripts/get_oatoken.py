@@ -2,11 +2,10 @@ from requests_oauthlib import OAuth1Session
 from urllib.parse import parse_qsl
 
 
-
 def get_authenticate_endpoint_url(cons_key, cons_sec, oauth_callback_url):
-    '''
+    """
     CONSUMER_KEYを用いてエンドポイントURLを取得．リクエストに失敗した場合はレスポンスを返す
-    '''
+    """
     tw_session = OAuth1Session(cons_key, cons_sec)
     request_token_url = "https://api.twitter.com/oauth/request_token"
     response = tw_session.post(
@@ -24,9 +23,9 @@ def get_authenticate_endpoint_url(cons_key, cons_sec, oauth_callback_url):
 
 
 def get_access_token(cons_key, cons_sec, oauth_token, oauth_ver):
-    '''
+    """
     CONSUMERキーとOAuthトークン,認証を用いてOAuth Token Secretを取得．
-    ''' 
+    """
     tw_session = OAuth1Session(cons_key, cons_sec, oauth_token, oauth_ver)
     access_token_url = "https://api.twitter.com/oauth/access_token"
     res = tw_session.post(
@@ -45,9 +44,8 @@ if __name__ == "__main__":
     try:
         from .local_settings import apikeys
     except ImportError:
-        print('try another path')
+        print("try another path")
         from local_settings import apikeys
-
 
     print(
         get_authenticate_endpoint_url(

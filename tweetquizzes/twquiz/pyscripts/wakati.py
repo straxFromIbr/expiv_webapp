@@ -112,7 +112,7 @@ def mask_text(text, nbreplace=3):
     # print(wakati.parsed)
     # print(wakati.filter_idx)
     wakati = Wakati(text)
-    wakati.add_multifilters() 
+    wakati.add_multifilters()
 
     # print(wakati.filter_idx)
     replaced_idxs, replaced = wakati.replace_random(nbreplace=nbreplace)
